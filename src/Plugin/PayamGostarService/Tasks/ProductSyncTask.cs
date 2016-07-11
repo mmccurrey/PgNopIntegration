@@ -45,7 +45,7 @@ namespace Septa.PgNopIntegration.Plugin.PayamGostarService.Tasks
                 }
             }
 
-            if (productChnages.EditedProducts != null)
+            if (productChnages.EditedProducts != null && productChnages.EditedProducts.Any())
             {
                 foreach (var p in productChnages.EditedProducts)
                 {
@@ -54,11 +54,11 @@ namespace Septa.PgNopIntegration.Plugin.PayamGostarService.Tasks
                 }
             }
 
-            if (productChnages.DeletedProductCodes != null)
+            if (productChnages.DeletedProductCodes != null && productChnages.DeletedProductCodes.Any())
             {
                 foreach (var p in productChnages.DeletedProductCodes)
                 {
-                    // TODO: delete fromProduct Entity
+                    // TODO: delete from Product Entity
                     // TODO : delete from PgProductMetaData Entity
                 }
             }
