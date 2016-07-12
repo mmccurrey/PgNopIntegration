@@ -25,13 +25,13 @@ namespace Septa.PgNopIntegration.Plugin.PayamGostarService.Catalog
 
         # region Implementation of IPgProductMetaDataService
 
-        public virtual PgProductMetaData GetPgProductMetaDataById(int Id)
+        public virtual PgProductMetaData GetPgProductMetaDataById(int id)
         {
-            if (Id <= 0)
+            if (id <= 0)
                 return null;
 
             var query = from p in _pgProductMetaDataRepository.Table
-                        where p.Code == Id
+                        where p.Id == id
                         select p;
 
             var pgProductMetaData = query.FirstOrDefault();
@@ -39,25 +39,18 @@ namespace Septa.PgNopIntegration.Plugin.PayamGostarService.Catalog
             return pgProductMetaData;
         }
 
-        public virtual PgProductMetaData GetPgProductMetaDataByCode(int Code)
+        public virtual PgProductMetaData GetPgProductMetaDataByCode(string code)
         {
-            if (Code <= 0)
+            if (string.IsNullOrEmpty(code))
                 return null;
 
-            var query = from  p in _pgProductMetaDataRepository.Table
-                        where p.Code==Code
+            var query = from p in _pgProductMetaDataRepository.Table
+                        where p.Code == code
                         select p;
 
             var pgProductMetaData = query.FirstOrDefault();
 
             return pgProductMetaData;
-        }
-
-        public virtual void DeletePgProductMetaData(PgProductMetaData pgProductMetaData)
-        {
-            // because Product entity has one-to-one relationship with PgProductMetadata Entity virtually, it is not necessary to impelment delete method.
-
-            throw new NotImplementedException();
         }
 
         public virtual void InsertPgProductMetaData(PgProductMetaData pgProductMetaData)
@@ -70,7 +63,7 @@ namespace Septa.PgNopIntegration.Plugin.PayamGostarService.Catalog
 
         public virtual void InsertPgProductMetaData(IEnumerable<PgProductMetaData> pgProductMetaDataList)
         {
-            if (pgProductMetaDataList == null && !pgProductMetaDataList.Any())
+            if (pgProductMetaDataList == null || !pgProductMetaDataList.Any())
                 throw new ArgumentNullException("pgProductMetaDataList");
 
             _pgProductMetaDataRepository.Insert(pgProductMetaDataList);
@@ -86,11 +79,12 @@ namespace Septa.PgNopIntegration.Plugin.PayamGostarService.Catalog
 
         public virtual void UpdatePgProductMetaData(IEnumerable<PgProductMetaData> pgProductMetaDataList)
         {
-            if (pgProductMetaDataList == null && !pgProductMetaDataList.Any())
+            if (pgProductMetaDataList == null || !pgProductMetaDataList.Any())
                 throw new ArgumentNullException("pgProductMetaDataList");
 
             _pgProductMetaDataRepository.Update(pgProductMetaDataList);
         }
         # endregion
+
     }
 }

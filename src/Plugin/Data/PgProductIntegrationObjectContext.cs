@@ -1,6 +1,7 @@
 ﻿using Nop.Core;
 using Nop.Data;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 
@@ -16,7 +17,7 @@ namespace Septa.PgNopIntegration.Plugin.Data
 
         }
 
-        # endregion 
+        # endregion
 
         #region Implementation of DbContext
 
@@ -37,12 +38,12 @@ namespace Septa.PgNopIntegration.Plugin.Data
             return base.Set<TEntity>();
         }
 
-        public System.Collections.Generic.IList<TEntity> ExecuteStoredProcedureList<TEntity>(string commandText, params object[] parameters) where TEntity : BaseEntity, new()
+        public IList<TEntity> ExecuteStoredProcedureList<TEntity>(string commandText, params object[] parameters) where TEntity : BaseEntity, new()
         {
             throw new System.NotImplementedException();
         }
 
-        public System.Collections.Generic.IEnumerable<TElement> SqlQuery<TElement>(string sql, params object[] parameters)
+        public IEnumerable<TElement> SqlQuery<TElement>(string sql, params object[] parameters)
         {
             throw new System.NotImplementedException();
         }

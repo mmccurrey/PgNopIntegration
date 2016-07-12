@@ -11,7 +11,7 @@ namespace Septa.PgNopIntegration.Plugin.Data
             // Table & Collumn Mappings
             this.ToTable("PgProductMetaData");
             this.Property(p => p.ProductId).HasColumnName("ProductId");
-            this.Property(p => p.Code).HasColumnName("Code");
+            this.Property(p => p.Code).HasColumnName("Code").HasMaxLength(30000);
             this.Property(p => p.LastSyncDate).HasColumnName("LastSyncDate");
 
 

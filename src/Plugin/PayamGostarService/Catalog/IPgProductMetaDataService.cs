@@ -13,22 +13,16 @@ namespace Septa.PgNopIntegration.Plugin.PayamGostarService.Catalog
         /// <summary>
         /// Gets PgProduct MetaData
         /// </summary>
-        /// <param name="Id">PgProduct MetaData identifier</param>
+        /// <param name="id">PgProduct MetaData identifier</param>
         /// <returns>PgProduct MetaData</returns>
-        PgProductMetaData GetPgProductMetaDataById(int Id);
+        PgProductMetaData GetPgProductMetaDataById(int id);
 
         /// <summary>
         /// Gets PgProduct MetaData
         /// </summary>
-        /// <param name="Code">PgProduct MetaData identifier</param>
+        /// <param name="code">PgProduct MetaData identifier</param>
         /// <returns>PgProduct MetaData</returns>
-        PgProductMetaData GetPgProductMetaDataByCode(int Code);
-
-        /// <summary>
-        /// Deletes a PgProduct MetaData
-        /// </summary>
-        /// <param name="pgProductMetaData">PgProduct MetaData</param>
-        void DeletePgProductMetaData(PgProductMetaData pgProductMetaData);
+        PgProductMetaData GetPgProductMetaDataByCode(string code);
 
         /// <summary>
         /// Inserts a PgProduct MetaData

@@ -232,7 +232,6 @@
     <Compile Include="PayamGostarService\Product.cs" />
     <Compile Include="PayamGostarService\ProductChanges.cs" />
     <Compile Include="PayamGostarService\ProductSyncService.cs" />
-    <Compile Include="PayamGostarService\Tasks\ProductSyncTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
