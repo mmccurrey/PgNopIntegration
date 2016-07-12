@@ -222,7 +222,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\PgProductIntegrationObjectContext.cs" />
+    <Compile Include="Data\PgProductMetaDataMap.cs" />
+    <Compile Include="Domain\PgProductMetaData.cs" />
     <Compile Include="PayamGostarPluginDependencyRegistrar.cs" />
+    <Compile Include="PayamGostarService\Catalog\IPgProductMetaDataService.cs" />
+    <Compile Include="PayamGostarService\Catalog\PgProductMetaDataService.cs" />
     <Compile Include="PayamGostarService\IProductSyncService.cs" />
     <Compile Include="PayamGostarService\Product.cs" />
     <Compile Include="PayamGostarService\ProductChanges.cs" />
@@ -233,6 +238,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
