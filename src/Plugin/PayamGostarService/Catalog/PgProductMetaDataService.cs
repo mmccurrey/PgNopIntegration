@@ -3,6 +3,7 @@ using System.Linq;
 using Nop.Core.Data;
 using Septa.PgNopIntegration.Plugin.Domain;
 using System.Collections.Generic;
+using System.Transactions;
 
 namespace Septa.PgNopIntegration.Plugin.PayamGostarService.Catalog
 {
@@ -48,9 +49,33 @@ namespace Septa.PgNopIntegration.Plugin.PayamGostarService.Catalog
                         where p.Code == code
                         select p;
 
-            var pgProductMetaData = query.FirstOrDefault();
+            PgProductMetaData pgProductMetaData = null;
+            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted }))
+            {
+                pgProductMetaData = query.FirstOrDefault();
+                scope.Complete();
+            }
 
             return pgProductMetaData;
+        }
+
+        public virtual IEnumerable<PgProductMetaData> GetPgProductMetaDataByCodes(List<string> codes)
+        {
+            if (codes == null || !codes.Any())
+                return null;
+
+            var query = from p in _pgProductMetaDataRepository.Table
+                        where codes.Contains(p.Code)
+                        select p;
+
+            IEnumerable<PgProductMetaData> pgProductMetaDataList = null;
+            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted }))
+            {
+                pgProductMetaDataList = query.ToList();
+                scope.Complete();
+            }
+
+            return pgProductMetaDataList;
         }
 
         public virtual void InsertPgProductMetaData(PgProductMetaData pgProductMetaData)
