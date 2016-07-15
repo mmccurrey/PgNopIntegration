@@ -25,10 +25,10 @@ namespace Septa.PgNopIntegration.Plugin.PayamGostarService.Catalog
         PgProductMetaData GetPgProductMetaDataByCode(string code);
 
         /// <summary>
-        /// Gets PgProduct MetaData
+        /// Gets PgProduct MetaData list
         /// </summary>
         /// <param name="codes">PgProduct MetaData identifier list</param>
-        /// <returns>PgProduct MetaData</returns>
+        /// <returns>PgProduct MetaData list</returns>
         IEnumerable<PgProductMetaData> GetPgProductMetaDataByCodes(List<string> codes);
 
         /// <summary>
