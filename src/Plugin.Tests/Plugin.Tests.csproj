@@ -246,6 +246,7 @@
   <ItemGroup>
     <Compile Include="PayamGostarPluginDependencyRegistrarTests.cs" />
     <Compile Include="PgProductMetaDataServiceTest.cs" />
+    <Compile Include="ProductSyncTaskTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
