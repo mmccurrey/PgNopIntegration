@@ -32,6 +32,11 @@ namespace Septa.PgNopIntegration.Plugin.PayamGostarService.Catalog
         IEnumerable<PgProductMetaData> GetPgProductMetaDataByCodes(List<string> codes);
 
         /// <summary>
+        /// Gets last product sync date from Payam Gostar
+        /// </summary>
+        DateTime GetLastSyncDate();
+
+        /// <summary>
         /// Inserts a PgProduct MetaData
         /// </summary>
         /// <param name="pgProductMetaData">PgProduct MetaData</param>

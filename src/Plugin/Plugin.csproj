@@ -229,6 +229,7 @@
     <Compile Include="PayamGostarPluginDependencyRegistrar.cs" />
     <Compile Include="PayamGostarService\Catalog\IPgProductMetaDataService.cs" />
     <Compile Include="PayamGostarService\Catalog\PgProductMetaDataService.cs" />
+    <Compile Include="PayamGostarService\Extensions\CollectionExtensions.cs" />
     <Compile Include="PayamGostarService\IProductSyncService.cs" />
     <Compile Include="PayamGostarService\Product.cs" />
     <Compile Include="PayamGostarService\ProductChanges.cs" />

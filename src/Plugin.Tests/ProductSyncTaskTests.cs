@@ -20,6 +20,7 @@ namespace Septa.PgNopIntegration.Plugin.Tests
             var productSyncServiceMock = new Mock<IProductSyncService>();
             var productServiceMock = new Mock<IProductService>();
             var pgProductMetaDataServiceMock = new Mock<IPgProductMetaDataService>();
+            var productTemplateServiceMock = new Mock<IProductTemplateService>();
             var logger = new Mock<ILogger>();
 
             productSyncServiceMock.Setup(x => x.GetProductChangesSince(It.IsAny<DateTime>()))
@@ -32,6 +33,13 @@ namespace Septa.PgNopIntegration.Plugin.Tests
                 }
                 });
 
+            productTemplateServiceMock.Setup(x => x.GetAllProductTemplates())
+                .Returns(new List<Nop.Core.Domain.Catalog.ProductTemplate> 
+                {
+                    new Nop.Core.Domain.Catalog.ProductTemplate() {Id=1, Name="Simple product", DisplayOrder=1, ViewPath=""}
+                }
+                );
+
             var insertedProductId = 5;
             productServiceMock.Setup(x => x.InsertProduct(It.IsAny<Nop.Core.Domain.Catalog.Product>()))
                 .Callback<Nop.Core.Domain.Catalog.Product>(x => x.Id = insertedProductId);
@@ -40,6 +48,7 @@ namespace Septa.PgNopIntegration.Plugin.Tests
                 productSyncServiceMock.Object,
                 productServiceMock.Object,
                 pgProductMetaDataServiceMock.Object,
+                productTemplateServiceMock.Object,
                 logger.Object);
 
             productSyncTask.Execute();

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Transactions;
 using Nop.Core.Data;
 using Septa.PgNopIntegration.Plugin.Domain;
 using System.Collections.Generic;
 using System.Transactions;
+using Septa.PgNopIntegration.Plugin.PayamGostarService.Extensions;
 
 namespace Septa.PgNopIntegration.Plugin.PayamGostarService.Catalog
 {
@@ -49,33 +51,28 @@ namespace Septa.PgNopIntegration.Plugin.PayamGostarService.Catalog
                         where p.Code == code
                         select p;
 
-            PgProductMetaData pgProductMetaData = null;
-            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted }))
-            {
-                pgProductMetaData = query.FirstOrDefault();
-                scope.Complete();
-            }
+            PgProductMetaData pgProductMetaData = query.FirstOrDefault();
 
             return pgProductMetaData;
         }
 
         public virtual IEnumerable<PgProductMetaData> GetPgProductMetaDataByCodes(List<string> codes)
         {
-            if (codes == null || !codes.Any())
+            if (codes.IsNullOrEmpty())
                 return null;
 
             var query = from p in _pgProductMetaDataRepository.Table
                         where codes.Contains(p.Code)
                         select p;
 
-            IEnumerable<PgProductMetaData> pgProductMetaDataList = null;
-            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted }))
-            {
-                pgProductMetaDataList = query.ToList();
-                scope.Complete();
-            }
+            IEnumerable<PgProductMetaData> pgProductMetaDataList = query.ToList();
 
             return pgProductMetaDataList;
+        }
+
+        public DateTime GetLastSyncDate()
+        {
+            return _pgProductMetaDataRepository.Table.Max(p => p.LastSyncDate);
         }
 
         public virtual void InsertPgProductMetaData(PgProductMetaData pgProductMetaData)
@@ -83,15 +80,23 @@ namespace Septa.PgNopIntegration.Plugin.PayamGostarService.Catalog
             if (pgProductMetaData == null)
                 throw new ArgumentNullException("pgProductMetaData");
 
-            _pgProductMetaDataRepository.Insert(pgProductMetaData);
+            using (TransactionScope scope = new System.Transactions.TransactionScope(TransactionScopeOption.Required))
+            {
+                _pgProductMetaDataRepository.Insert(pgProductMetaData);
+                scope.Complete();
+            }
         }
 
         public virtual void InsertPgProductMetaData(IEnumerable<PgProductMetaData> pgProductMetaDataList)
         {
-            if (pgProductMetaDataList == null || !pgProductMetaDataList.Any())
+            if (pgProductMetaDataList.IsNullOrEmpty())
                 throw new ArgumentNullException("pgProductMetaDataList");
 
-            _pgProductMetaDataRepository.Insert(pgProductMetaDataList);
+            using (TransactionScope scope = new System.Transactions.TransactionScope(TransactionScopeOption.Required))
+            {
+                _pgProductMetaDataRepository.Insert(pgProductMetaDataList);
+                scope.Complete();
+            }
         }
 
         public virtual void UpdatePgProductMetaData(PgProductMetaData pgProductMetaData)
@@ -99,15 +104,23 @@ namespace Septa.PgNopIntegration.Plugin.PayamGostarService.Catalog
             if (pgProductMetaData == null)
                 throw new ArgumentNullException("pgProductMetaData");
 
-            _pgProductMetaDataRepository.Update(pgProductMetaData);
+            using (TransactionScope scope = new System.Transactions.TransactionScope(TransactionScopeOption.Required))
+            {
+                _pgProductMetaDataRepository.Update(pgProductMetaData);
+                scope.Complete();
+            }
         }
 
         public virtual void UpdatePgProductMetaData(IEnumerable<PgProductMetaData> pgProductMetaDataList)
         {
-            if (pgProductMetaDataList == null || !pgProductMetaDataList.Any())
+            if (pgProductMetaDataList.IsNullOrEmpty())
                 throw new ArgumentNullException("pgProductMetaDataList");
 
-            _pgProductMetaDataRepository.Update(pgProductMetaDataList);
+            using (TransactionScope scope = new System.Transactions.TransactionScope(TransactionScopeOption.Required))
+            {
+                _pgProductMetaDataRepository.Update(pgProductMetaDataList);
+                scope.Complete();
+            }
         }
         # endregion
 

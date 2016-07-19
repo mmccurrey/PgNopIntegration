@@ -23,8 +23,6 @@ namespace Septa.PgNopIntegration.Plugin
 
         public void Register(ContainerBuilder builder, ITypeFinder typeFinder, NopConfig config)
         {
-            builder.RegisterGeneric(typeof(Nop.Data.EfRepository<>)).As(typeof(Nop.Core.Data.IRepository<>)).InstancePerLifetimeScope();
-
             builder.RegisterType<ProductSyncService>().As<IProductSyncService>();
             builder.RegisterType<PgProductMetaDataService>().As<IPgProductMetaDataService>();
         }

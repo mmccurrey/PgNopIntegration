@@ -38,67 +38,65 @@ namespace Septa.PgNopIntegration.Plugin.Tests
         # region Facts
 
         [Fact]
-        public void GetPgProductMetaDataByIdTest()
+        public void GetPgProductMetaDataById()
         {
             // Arrange
             var target = new PgProductMetaDataService(_pgProductMetaDataRepository.Object);
-            var initialPgProductMetaData = new PgProductMetaData() { Id = 1, Code = "1", ProductId = 1, LastSyncDate = DateTime.UtcNow };
 
             // Act
-            var result = target.GetPgProductMetaDataByCode("1");
+            var result = target.GetPgProductMetaDataById(1);
 
             // Assert
-            Assert.Equal(initialPgProductMetaData, result);
-            Assert.Equal(initialPgProductMetaData.Id, result.Id);
+            Assert.Equal(1, result.Id);
         }
 
         [Fact]
-        public void GetPgProductMetaDataByCodeTest()
+        public void GetPgProductMetaDataByCode()
         {
             // Arrange
             var target = new PgProductMetaDataService(_pgProductMetaDataRepository.Object);
-            var initialPgProductMetaData = new PgProductMetaData() { Id = 2, Code = "2", ProductId = 2, LastSyncDate = DateTime.UtcNow };
 
             // Act
             var result = target.GetPgProductMetaDataByCode("2");
 
             // Assert
-            Assert.Equal(initialPgProductMetaData, result);
-            Assert.Equal(initialPgProductMetaData.Code, result.Code);
+            Assert.Equal("2", result.Code);
         }
 
         [Fact]
-        public void GetPgProductMetaDataByCodesTest()
+        public void GetPgProductMetaDataByCodes()
         {
             // Arrange
             var target = new PgProductMetaDataService(_pgProductMetaDataRepository.Object);
-            var initialPgProductMetaDataList = new List<PgProductMetaData>
-            {
-                new PgProductMetaData() { Id = 1, Code = "1", ProductId = 1, LastSyncDate = DateTime.UtcNow },
-                new PgProductMetaData() { Id = 3, Code = "3", ProductId = 3, LastSyncDate = DateTime.UtcNow },
-            };
 
             // Act
             var result = target.GetPgProductMetaDataByCodes(new List<string> { "1", "3" });
 
             // Assert
-            Assert.NotNull(initialPgProductMetaDataList);
-
-            Assert.Equal(initialPgProductMetaDataList, result);
-
-            Assert.Equal(initialPgProductMetaDataList.FirstOrDefault().Id, result.FirstOrDefault().Id);
-            Assert.Equal(initialPgProductMetaDataList.FirstOrDefault().Code, result.FirstOrDefault().Code);
-            Assert.Equal(initialPgProductMetaDataList.FirstOrDefault().ProductId, result.FirstOrDefault().ProductId);
-        }
-
-        //[Fact]
-        public void InsertPgProductMetaDataTest()
-        {
-            throw new NotImplementedException();
+            Assert.Equal(2, result.Count());
+            Assert.Equal("1", result.FirstOrDefault().Code);
+            Assert.Equal("3", result.LastOrDefault().Code);
         }
 
         [Fact]
-        public void UpdatePgProductMetaDataTest()
+        public void InsertPgProductMetaDataTest()
+        {
+            // Arrange
+            var insertedProductId = 1;
+            _pgProductMetaDataRepository.Setup(x => x.Insert(It.IsAny<PgProductMetaData>()))
+                .Callback<PgProductMetaData>(y => y.Id = insertedProductId);
+            var target = new PgProductMetaDataService(_pgProductMetaDataRepository.Object);
+
+            // Act
+            target.InsertPgProductMetaData(new PgProductMetaData() { Id = 1, Code = "1" });
+
+            // Assert
+            _pgProductMetaDataRepository.Verify(x => x.Insert(It.Is<PgProductMetaData>(y => y.Id == 1 && y.Code == "1")));
+
+        }
+
+        [Fact]
+        public void UpdatePgProductMetaData()
         {
             // Arrange
             var target = new PgProductMetaDataService(_pgProductMetaDataRepository.Object);
@@ -111,18 +109,12 @@ namespace Septa.PgNopIntegration.Plugin.Tests
             var updateProduct = target.GetPgProductMetaDataById(1);
 
             // Assert
-            Assert.Equal(initialProduct.Code, updateProduct.Code);
             Assert.Equal(initialProduct.Id, updateProduct.Id);
-            Assert.Equal(initialProduct.LastSyncDate, updateProduct.LastSyncDate);
-
-            Assert.Equal("10", updateProduct.Code);
-
-            Assert.True(initialProduct.Code == "10");
-            Assert.True(updateProduct.Code == "10");
+            Assert.Equal(initialProduct.Code, updateProduct.Code);
         }
 
         [Fact]
-        public void UpdatePgProductMetaDataListTest()
+        public void UpdatePgProductMetaDataList()
         {
             // Arrange
             var target = new PgProductMetaDataService(_pgProductMetaDataRepository.Object);
@@ -143,17 +135,11 @@ namespace Septa.PgNopIntegration.Plugin.Tests
             var updatepgProductMetaDataList = target.GetPgProductMetaDataByCodes(new List<string> { "2", "3" });
 
             // Assert
-            Assert.NotNull(initialPgProductMetaDataList);
-            Assert.NotNull(updatepgProductMetaDataList);
+            Assert.Equal(initialPgProductMetaData1.Id, updatepgProductMetaDataList.FirstOrDefault().Id);
+            Assert.Equal(initialPgProductMetaData2.Id, updatepgProductMetaDataList.LastOrDefault().Id);
 
             Assert.Equal(initialPgProductMetaData1.Code, updatepgProductMetaDataList.FirstOrDefault().Code);
             Assert.Equal(initialPgProductMetaData2.Code, updatepgProductMetaDataList.LastOrDefault().Code);
-
-            Assert.Equal(initialPgProductMetaData1.ProductId, updatepgProductMetaDataList.FirstOrDefault().ProductId);
-            Assert.Equal(initialPgProductMetaData2.ProductId, updatepgProductMetaDataList.LastOrDefault().ProductId);
-
-            Assert.Equal(15, updatepgProductMetaDataList.FirstOrDefault().ProductId);
-            Assert.Equal(20, updatepgProductMetaDataList.LastOrDefault().ProductId);
         }
 
         # endregion
