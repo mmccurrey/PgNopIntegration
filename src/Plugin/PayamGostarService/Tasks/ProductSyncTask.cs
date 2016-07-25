@@ -48,20 +48,12 @@ namespace Septa.PgNopIntegration.Plugin.PayamGostarService.Tasks
             {
                 var product = new Nop.Core.Domain.Catalog.Product();
                 InstantiateNewProduct(p, product);
-                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
-                {
-                    _productService.InsertProduct(product);
-                    scope.Complete();
-                }
+                _productService.InsertProduct(product);
 
                 var pgProductMetaData = new PgProductMetaData();
                 InstantiateNewPgProductMetaData(p, pgProductMetaData);
                 pgProductMetaData.ProductId = product.Id;
-                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
-                {
-                    _pgProductMetaDataService.InsertPgProductMetaData(pgProductMetaData);
-                    scope.Complete();
-                }
+                _pgProductMetaDataService.InsertPgProductMetaData(pgProductMetaData);
             }
         }
 
@@ -73,21 +65,16 @@ namespace Septa.PgNopIntegration.Plugin.PayamGostarService.Tasks
 
                 // update product
                 var product = _productService.GetProductById(pgProductMetaData.ProductId);
-                product.Name = p.Name;
-                product.Price = p.UnitPrice;
-                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
-                {
-                    _productService.UpdateProduct(product);
-                    scope.Complete();
-                }
+                InstantiateEditedProduct(p, product);
+                _productService.UpdateProduct(product);
+
 
                 // update pgProductMetaData
+                pgProductMetaData.Code = p.Code;
+                pgProductMetaData.ProductId = pgProductMetaData.ProductId;
                 pgProductMetaData.LastSyncDate = DateTime.UtcNow;
-                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
-                {
-                    _pgProductMetaDataService.UpdatePgProductMetaData(pgProductMetaData);
-                    scope.Complete();
-                }
+                _pgProductMetaDataService.UpdatePgProductMetaData(pgProductMetaData);
+
             }
         }
 
@@ -99,20 +86,15 @@ namespace Septa.PgNopIntegration.Plugin.PayamGostarService.Tasks
                 var product = _productService.GetProductById(pgProductMetaData.ProductId);
 
                 // update product
-                product.Deleted = true;
-                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
-                {
-                    _productService.UpdateProduct(product);
-                    scope.Complete();
-                }
+                InstantiateDeletedProduct(product);
+                _productService.UpdateProduct(product);
 
                 // update pgProductMetaData
+                pgProductMetaData.Code = productCode;
+                pgProductMetaData.ProductId = pgProductMetaData.ProductId;
                 pgProductMetaData.LastSyncDate = DateTime.UtcNow;
-                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
-                {
-                    _pgProductMetaDataService.UpdatePgProductMetaData(pgProductMetaData);
-                    scope.Complete();
-                }
+                _pgProductMetaDataService.UpdatePgProductMetaData(pgProductMetaData);
+
             }
         }
 
@@ -152,6 +134,66 @@ namespace Septa.PgNopIntegration.Plugin.PayamGostarService.Tasks
             targetProduct.LastSyncDate = DateTime.UtcNow;
         }
 
+        protected virtual void InstantiateEditedProduct(Septa.PayamGostar.ServiceLayer.Contract.DataContracts.Product sourceProduct, Nop.Core.Domain.Catalog.Product targetProduct)
+        {
+            targetProduct.Name = sourceProduct.Name;
+            targetProduct.Price = sourceProduct.UnitPrice;
+
+            targetProduct.ProductTemplateId = targetProduct.ProductTemplateId;
+
+            targetProduct.ProductTypeId = targetProduct.ProductTypeId;
+            targetProduct.MaximumCustomerEnteredPrice = targetProduct.MaximumCustomerEnteredPrice;
+            targetProduct.MaxNumberOfDownloads = targetProduct.MaxNumberOfDownloads;
+            targetProduct.RecurringCycleLength = targetProduct.RecurringCycleLength;
+            targetProduct.RecurringTotalCycles = targetProduct.RecurringTotalCycles;
+            targetProduct.RentalPriceLength = targetProduct.RentalPriceLength;
+            targetProduct.StockQuantity = targetProduct.StockQuantity;
+            targetProduct.NotifyAdminForQuantityBelow = targetProduct.NotifyAdminForQuantityBelow;
+            targetProduct.OrderMinimumQuantity = targetProduct.OrderMinimumQuantity;
+            targetProduct.OrderMaximumQuantity = targetProduct.OrderMaximumQuantity;
+
+            targetProduct.UnlimitedDownloads = targetProduct.UnlimitedDownloads;
+            targetProduct.AllowCustomerReviews = targetProduct.AllowCustomerReviews;
+            targetProduct.VisibleIndividually = targetProduct.VisibleIndividually;
+            targetProduct.ShowOnHomePage = targetProduct.ShowOnHomePage;
+
+            targetProduct.Published = targetProduct.Published;
+            targetProduct.Deleted = targetProduct.Deleted;
+
+            targetProduct.CreatedOnUtc = targetProduct.CreatedOnUtc;
+            targetProduct.UpdatedOnUtc = DateTime.UtcNow;
+        }
+
+        protected virtual void InstantiateDeletedProduct(Nop.Core.Domain.Catalog.Product targetProduct)
+        {
+            targetProduct.Name = targetProduct.Name;
+            targetProduct.Price = targetProduct.Price;
+
+            targetProduct.ProductTemplateId = targetProduct.ProductTemplateId;
+
+            targetProduct.ProductTypeId = targetProduct.ProductTypeId;
+            targetProduct.MaximumCustomerEnteredPrice = targetProduct.MaximumCustomerEnteredPrice;
+            targetProduct.MaxNumberOfDownloads = targetProduct.MaxNumberOfDownloads;
+            targetProduct.RecurringCycleLength = targetProduct.RecurringCycleLength;
+            targetProduct.RecurringTotalCycles = targetProduct.RecurringTotalCycles;
+            targetProduct.RentalPriceLength = targetProduct.RentalPriceLength;
+            targetProduct.StockQuantity = targetProduct.StockQuantity;
+            targetProduct.NotifyAdminForQuantityBelow = targetProduct.NotifyAdminForQuantityBelow;
+            targetProduct.OrderMinimumQuantity = targetProduct.OrderMinimumQuantity;
+            targetProduct.OrderMaximumQuantity = targetProduct.OrderMaximumQuantity;
+
+            targetProduct.UnlimitedDownloads = targetProduct.UnlimitedDownloads;
+            targetProduct.AllowCustomerReviews = targetProduct.AllowCustomerReviews;
+            targetProduct.VisibleIndividually = targetProduct.VisibleIndividually;
+            targetProduct.ShowOnHomePage = targetProduct.ShowOnHomePage;
+
+            targetProduct.Published = targetProduct.Published;
+            targetProduct.Deleted = true; ;
+
+            targetProduct.CreatedOnUtc = targetProduct.CreatedOnUtc;
+            targetProduct.UpdatedOnUtc = DateTime.UtcNow;
+        }
+
         # endregion
 
         # region Implementation of ITask
@@ -161,29 +203,34 @@ namespace Septa.PgNopIntegration.Plugin.PayamGostarService.Tasks
         /// </summary>
         public virtual void Execute()
         {
-            try
+            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
             {
-                var lastSyncDate = _pgProductMetaDataService.GetLastSyncDate();
-                var productChnages = _productSyncService.GetProductChangesSince(lastSyncDate); 
-
-                if (!productChnages.NewProducts.IsNullOrEmpty())
+                try
                 {
-                    SyncNewProducts(productChnages.NewProducts);
+                    var lastSyncDate = _pgProductMetaDataService.GetLastSyncDate();
+                    var productChnages = _productSyncService.GetProductChangesSince(lastSyncDate);
+
+                    if (!productChnages.NewProducts.IsNullOrEmpty())
+                    {
+                        SyncNewProducts(productChnages.NewProducts);
+                    }
+
+                    if (!productChnages.EditedProducts.IsNullOrEmpty())
+                    {
+                        SyncEditedProducts(productChnages.EditedProducts);
+                    }
+
+                    if (!productChnages.DeletedProductCodes.IsNullOrEmpty())
+                    {
+                        SyncDeletedProducts(productChnages.DeletedProductCodes);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error(string.Format("Error syncing products from PayamGostar. {0}", ex.Message), ex);
                 }
 
-                if (!productChnages.EditedProducts.IsNullOrEmpty())
-                {
-                    SyncEditedProducts(productChnages.EditedProducts);
-                }
-
-                if (!productChnages.DeletedProductCodes.IsNullOrEmpty())
-                {
-                    SyncDeletedProducts(productChnages.DeletedProductCodes);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(string.Format("Error syncing products from PayamGostar. {0}", ex.Message), ex);
+                scope.Complete();
             }
         }
 

@@ -80,11 +80,8 @@ namespace Septa.PgNopIntegration.Plugin.PayamGostarService.Catalog
             if (pgProductMetaData == null)
                 throw new ArgumentNullException("pgProductMetaData");
 
-            using (TransactionScope scope = new System.Transactions.TransactionScope(TransactionScopeOption.Required))
-            {
-                _pgProductMetaDataRepository.Insert(pgProductMetaData);
-                scope.Complete();
-            }
+            _pgProductMetaDataRepository.Insert(pgProductMetaData);
+
         }
 
         public virtual void InsertPgProductMetaData(IEnumerable<PgProductMetaData> pgProductMetaDataList)
@@ -92,11 +89,7 @@ namespace Septa.PgNopIntegration.Plugin.PayamGostarService.Catalog
             if (pgProductMetaDataList.IsNullOrEmpty())
                 throw new ArgumentNullException("pgProductMetaDataList");
 
-            using (TransactionScope scope = new System.Transactions.TransactionScope(TransactionScopeOption.Required))
-            {
-                _pgProductMetaDataRepository.Insert(pgProductMetaDataList);
-                scope.Complete();
-            }
+            _pgProductMetaDataRepository.Insert(pgProductMetaDataList);
         }
 
         public virtual void UpdatePgProductMetaData(PgProductMetaData pgProductMetaData)
@@ -104,11 +97,8 @@ namespace Septa.PgNopIntegration.Plugin.PayamGostarService.Catalog
             if (pgProductMetaData == null)
                 throw new ArgumentNullException("pgProductMetaData");
 
-            using (TransactionScope scope = new System.Transactions.TransactionScope(TransactionScopeOption.Required))
-            {
-                _pgProductMetaDataRepository.Update(pgProductMetaData);
-                scope.Complete();
-            }
+            _pgProductMetaDataRepository.Update(pgProductMetaData);
+
         }
 
         public virtual void UpdatePgProductMetaData(IEnumerable<PgProductMetaData> pgProductMetaDataList)
@@ -116,11 +106,7 @@ namespace Septa.PgNopIntegration.Plugin.PayamGostarService.Catalog
             if (pgProductMetaDataList.IsNullOrEmpty())
                 throw new ArgumentNullException("pgProductMetaDataList");
 
-            using (TransactionScope scope = new System.Transactions.TransactionScope(TransactionScopeOption.Required))
-            {
-                _pgProductMetaDataRepository.Update(pgProductMetaDataList);
-                scope.Complete();
-            }
+            _pgProductMetaDataRepository.Update(pgProductMetaDataList);
         }
         # endregion
 

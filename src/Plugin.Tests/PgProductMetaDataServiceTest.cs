@@ -82,9 +82,6 @@ namespace Septa.PgNopIntegration.Plugin.Tests
         public void InsertPgProductMetaDataTest()
         {
             // Arrange
-            var insertedProductId = 1;
-            _pgProductMetaDataRepository.Setup(x => x.Insert(It.IsAny<PgProductMetaData>()))
-                .Callback<PgProductMetaData>(y => y.Id = insertedProductId);
             var target = new PgProductMetaDataService(_pgProductMetaDataRepository.Object);
 
             // Act
