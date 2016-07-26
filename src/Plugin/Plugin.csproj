@@ -225,6 +225,7 @@
     <Compile Include="Data\PgProductIntegrationObjectContext.cs" />
     <Compile Include="Data\PgProductMetaDataMap.cs" />
     <Compile Include="Domain\PgProductMetaData.cs" />
+    <Compile Include="PayamGostarPlugin.cs" />
     <Compile Include="PayamGostarPluginDependencyRegistrar.cs" />
     <Compile Include="PayamGostarService\Catalog\IPgProductMetaDataService.cs" />
     <Compile Include="PayamGostarService\Catalog\PgProductMetaDataService.cs" />
