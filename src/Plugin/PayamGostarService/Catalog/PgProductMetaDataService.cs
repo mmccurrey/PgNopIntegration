@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Transactions;
 using Nop.Core.Data;
 using Septa.PgNopIntegration.Plugin.Domain;
 using System.Collections.Generic;
+using System.Transactions;
+using Septa.PgNopIntegration.Plugin.PayamGostarService.Extensions;
 
 namespace Septa.PgNopIntegration.Plugin.PayamGostarService.Catalog
 {
@@ -48,9 +51,28 @@ namespace Septa.PgNopIntegration.Plugin.PayamGostarService.Catalog
                         where p.Code == code
                         select p;
 
-            var pgProductMetaData = query.FirstOrDefault();
+            PgProductMetaData pgProductMetaData = query.FirstOrDefault();
 
             return pgProductMetaData;
+        }
+
+        public virtual IEnumerable<PgProductMetaData> GetPgProductMetaDataByCodes(List<string> codes)
+        {
+            if (codes.IsNullOrEmpty())
+                return null;
+
+            var query = from p in _pgProductMetaDataRepository.Table
+                        where codes.Contains(p.Code)
+                        select p;
+
+            IEnumerable<PgProductMetaData> pgProductMetaDataList = query.ToList();
+
+            return pgProductMetaDataList;
+        }
+
+        public DateTime GetLastSyncDate()
+        {
+            return _pgProductMetaDataRepository.Table.Max(p => p.LastSyncDate);
         }
 
         public virtual void InsertPgProductMetaData(PgProductMetaData pgProductMetaData)
@@ -59,11 +81,12 @@ namespace Septa.PgNopIntegration.Plugin.PayamGostarService.Catalog
                 throw new ArgumentNullException("pgProductMetaData");
 
             _pgProductMetaDataRepository.Insert(pgProductMetaData);
+
         }
 
         public virtual void InsertPgProductMetaData(IEnumerable<PgProductMetaData> pgProductMetaDataList)
         {
-            if (pgProductMetaDataList == null || !pgProductMetaDataList.Any())
+            if (pgProductMetaDataList.IsNullOrEmpty())
                 throw new ArgumentNullException("pgProductMetaDataList");
 
             _pgProductMetaDataRepository.Insert(pgProductMetaDataList);
@@ -75,11 +98,12 @@ namespace Septa.PgNopIntegration.Plugin.PayamGostarService.Catalog
                 throw new ArgumentNullException("pgProductMetaData");
 
             _pgProductMetaDataRepository.Update(pgProductMetaData);
+
         }
 
         public virtual void UpdatePgProductMetaData(IEnumerable<PgProductMetaData> pgProductMetaDataList)
         {
-            if (pgProductMetaDataList == null || !pgProductMetaDataList.Any())
+            if (pgProductMetaDataList.IsNullOrEmpty())
                 throw new ArgumentNullException("pgProductMetaDataList");
 
             _pgProductMetaDataRepository.Update(pgProductMetaDataList);
