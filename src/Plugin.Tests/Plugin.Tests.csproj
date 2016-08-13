@@ -11,11 +11,7 @@
     <AssemblyName>Septa.PgNopIntegration.Plugin.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-<<<<<<< HEAD
     <NuGetPackageImportStamp>11bab11b</NuGetPackageImportStamp>
-=======
-    <NuGetPackageImportStamp>9fe2b7d5</NuGetPackageImportStamp>
->>>>>>> a626092fc04fcf99ec78b9c34256b49a352b26b0
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -248,12 +244,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PayamGostarPluginDependencyRegistrarTests.cs" />
-<<<<<<< HEAD
-    <Compile Include="PayamGostarPluginTest.cs" />
-=======
-    <Compile Include="PgProductMetaDataServiceTest.cs" />
-    <Compile Include="ProductSyncTaskTests.cs" />
->>>>>>> a626092fc04fcf99ec78b9c34256b49a352b26b0
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

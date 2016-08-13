@@ -70,9 +70,8 @@ namespace Septa.PgNopIntegration.Plugin
         /// </summary>
         public override void Install()
         {
-            base.Install();
             EnableUsernameAuthenticationMode();
-
+            base.Install();
         }
 
         /// <summary>
